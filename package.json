@@ -1,0 +1,25 @@
+{
+  "name": "vmprint-transmuters-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "markdown-core",
+    "mkd-mkd",
+    "mkd-academic",
+    "mkd-literature",
+    "mkd-manuscript",
+    "mkd-screenplay"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces --if-present",
+    "clean": "npm run clean --workspaces --if-present"
+  },
+  "devDependencies": {
+    "dts-bundle-generator": "^9.5.1",
+    "esbuild": "^0.27.4",
+    "rimraf": "^6.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.3"
+  }
+}
