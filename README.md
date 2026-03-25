@@ -1,5 +1,7 @@
 # VMPrint Transmuters
 
+> 🚀 **Part of the [VMPrint Ecosystem](https://github.com/cosmiciron/vmprint)**
+
 A transmuter converts a source format into VMPrint's native intermediate representation — `DocumentInput` — without touching the layout engine.
 
 ## Why transmuters exist
