@@ -1,5 +1,5 @@
 import type { MdNode } from './parse';
-import { KEEP_WITH_NEXT_PATTERN } from './parse';
+import { DROP_CAP_PATTERN, KEEP_WITH_NEXT_PATTERN } from './parse';
 
 export type SourceRange = {
   lineStart: number;
@@ -36,6 +36,7 @@ export type SemanticNode = {
   language?: string;
   align?: Array<'left' | 'right' | 'center' | null>;
   keepWithNext?: boolean;
+  dropCap?: Record<string, unknown>;
   sourceRange?: SourceRange;
   sourceSyntax?: string;
 };
@@ -234,9 +235,12 @@ function mapBlock(node: MdNode, defs: DefinitionMap): SemanticNode[] {
 function mapBlocks(nodes: MdNode[], defs: DefinitionMap): SemanticNode[] {
   const out: SemanticNode[] = [];
   let pendingKeepWithNext = false;
+  let pendingDropCap: Record<string, unknown> | null = null;
   for (const node of nodes) {
     if (node.type === 'html') {
       if (KEEP_WITH_NEXT_PATTERN.test(node.value || '')) pendingKeepWithNext = true;
+      const dropCap = parseDropCapComment(node.value || '');
+      if (dropCap) pendingDropCap = dropCap;
       continue;
     }
     const mapped = mapBlock(node, defs);
@@ -244,9 +248,33 @@ function mapBlocks(nodes: MdNode[], defs: DefinitionMap): SemanticNode[] {
       mapped[0] = { ...mapped[0], keepWithNext: true };
       pendingKeepWithNext = false;
     }
+    if (pendingDropCap && mapped.length > 0) {
+      mapped[0] = { ...mapped[0], dropCap: pendingDropCap };
+      pendingDropCap = null;
+    }
     out.push(...mapped);
   }
   return out;
+}
+
+function parseDropCapComment(value: string): Record<string, unknown> | null {
+  if (!DROP_CAP_PATTERN.test(value)) return null;
+
+  const spec: Record<string, unknown> = { enabled: true };
+  const attrPattern = /([\w-]+)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/g;
+  let match: RegExpExecArray | null;
+  while ((match = attrPattern.exec(value))) {
+    const key = match[1].toLowerCase();
+    const raw = match[2].replace(/^['"]|['"]$/g, '');
+    if (key === 'lines' || key === 'chars' || key === 'characters' || key === 'gap') {
+      const num = Number(raw);
+      if (!Number.isFinite(num)) continue;
+      if (key === 'chars') spec.characters = num;
+      else spec[key === 'characters' ? 'characters' : key] = num;
+    }
+  }
+
+  return spec;
 }
 
 export function normalizeToSemantic(ast: MdNode): SemanticDocument {

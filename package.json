@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
+    "dev-cli",
     "markdown-core",
     "mkd-mkd",
     "mkd-academic",
@@ -13,7 +14,8 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces --if-present",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "dev:transmute": "tsx dev-cli/src/index.ts"
   },
   "devDependencies": {
     "dts-bundle-generator": "^9.5.1",

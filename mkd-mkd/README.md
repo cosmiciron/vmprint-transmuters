@@ -59,6 +59,22 @@ links:
 # My Document
 ```
 
+## Drop Caps
+
+Mark the next paragraph with an HTML comment:
+
+```markdown
+<!-- dropcap -->
+This paragraph begins with a drop cap.
+```
+
+Optional numeric settings can be passed inline:
+
+```markdown
+<!-- dropcap lines=3 chars=1 gap=2 -->
+This paragraph begins with a drop cap.
+```
+
 ## Themes
 
 Supply any theme YAML string using the same format as draft2final `themes/*.yaml`:

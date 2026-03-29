@@ -10,7 +10,7 @@ import type { DocumentInput, ResolvedImage } from './types';
 export type { DocumentInput, Element, ElementStyle, DocumentLayout, ResolvedImage } from './types';
 export type { ThemeDefinition } from './theme';
 export type { MdNode, MdPosition } from './parse';
-export { KEEP_WITH_NEXT_PATTERN, parseMarkdownAst } from './parse';
+export { DROP_CAP_PATTERN, KEEP_WITH_NEXT_PATTERN, parseMarkdownAst } from './parse';
 export type { SourceRange, SemanticNodeKind, SemanticNode, SemanticDocument } from './semantic';
 export { normalizeToSemantic } from './semantic';
 export { formatNumber, toAlpha, toRoman } from './numbering';

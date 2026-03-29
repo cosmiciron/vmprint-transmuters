@@ -28,6 +28,7 @@ export type MdNode = {
 };
 
 export const KEEP_WITH_NEXT_PATTERN = /^\s*<!--\s*keep-with-next\s*-->\s*$/i;
+export const DROP_CAP_PATTERN = /^\s*<!--\s*dropcap(?:\s+([\w-]+)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+))*\s*-->\s*$/i;
 
 export function parseMarkdownAst(markdown: string): MdNode {
   const processor = remark().use(remarkParse).use(remarkGfm);

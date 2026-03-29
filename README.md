@@ -41,6 +41,20 @@ So `mkd-mkd` is the Markdown → `DocumentInput` transmuter. The second `mkd` he
 
 Transmuters remain the lower-level primitives: `source text` in, `DocumentInput` AST out. They are where source-format semantics and default conventions live. This keeps heavy regression coverage at the transmuter level while the CLI stays lightweight.
 
+## Local dev loop
+
+For rapid local testing of a transmuter plus theme/config YAML, use the workspace dev CLI:
+
+```bash
+npm run dev:transmute -- sample.md --as mkd-mkd --theme ./theme.yaml --out ./sample.pdf
+```
+
+Or point directly at a transmuter source module:
+
+```bash
+npm run dev:transmute -- sample.md --transmuter ./mkd-mkd/src/index.ts --out ./sample.json
+```
+
 ## Adding a new transmuter
 
 Shared transmuter contract types live in [`@vmprint/contracts`](https://www.npmjs.com/package/@vmprint/contracts).

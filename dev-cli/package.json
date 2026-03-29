@@ -1,0 +1,28 @@
+{
+  "name": "@vmprint/transmuter-dev",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Developer CLI for rapid local testing of VMPrint transmuters and themes.",
+  "main": "dist/index.js",
+  "bin": {
+    "vmprint-transmute": "dist/index.js"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --format=cjs --outfile=dist/index.js",
+    "dev": "tsx src/index.ts",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@vmprint/context-pdf": "^1.0.0",
+    "@vmprint/contracts": "^1.0.0",
+    "@vmprint/engine": "^1.0.0",
+    "@vmprint/local-fonts": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.27.4",
+    "rimraf": "^6.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.3"
+  }
+}

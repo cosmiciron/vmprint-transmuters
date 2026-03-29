@@ -261,8 +261,11 @@ export class MarkdownFormatHandler {
         if (rule.action.role) {
           const mergedProperties: Record<string, unknown> = { ...(rule.action.properties || {}) };
           if (rule.action.role === 'paragraph') {
-            const openingDropCap = this.getOpeningDropCapProperties(node, ctx);
-            if (openingDropCap) Object.assign(mergedProperties, openingDropCap);
+            if (node.dropCap) mergedProperties.dropCap = node.dropCap;
+            else {
+              const openingDropCap = this.getOpeningDropCapProperties(node, ctx);
+              if (openingDropCap) Object.assign(mergedProperties, openingDropCap);
+            }
           }
           ctx.emit(rule.action.role, node.children || [], {
             sourceRange: node.sourceRange,
