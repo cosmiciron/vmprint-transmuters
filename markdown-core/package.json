@@ -1,6 +1,6 @@
 {
   "name": "@vmprint/markdown-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Runtime-neutral Markdown compiler core for VMPrint.",
   "author": "cosmiciron",
   "license": "Apache-2.0",
