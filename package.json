@@ -9,7 +9,8 @@
     "mkd-academic",
     "mkd-literature",
     "mkd-manuscript",
-    "mkd-screenplay"
+    "mkd-screenplay",
+    "mkd-zh-manuscript"
   ],
   "scripts": {
     "build": "npm run build --workspaces",

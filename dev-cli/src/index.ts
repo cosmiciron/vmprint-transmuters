@@ -2,11 +2,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { createEngineRuntime, LayoutEngine, LayoutUtils, Renderer, resolveDocumentPaths, toLayoutConfig } from '@vmprint/engine';
+import { createEngineRuntime, LayoutEngine, LayoutUtils, Renderer, resolveDocumentPaths, toLayoutConfig } from '../../../vmprint/engine/src/index.ts';
 import PdfContext from '@vmprint/context-pdf';
-import LocalFontManager from '@vmprint/local-fonts';
+import LocalFontManager from '../../../vmprint-font-managers/local/src/index.ts';
 
-type KnownTransmuterName = 'mkd-mkd' | 'mkd-academic' | 'mkd-literature' | 'mkd-manuscript' | 'mkd-screenplay';
+type KnownTransmuterName = 'mkd-mkd' | 'mkd-academic' | 'mkd-literature' | 'mkd-manuscript' | 'mkd-screenplay' | 'mkd-zh-manuscript';
 
 type CliOptions = {
   inputPath?: string;
@@ -70,7 +70,8 @@ const BUILTIN_TRANSMUTERS: Record<KnownTransmuterName, string> = {
   'mkd-academic': path.resolve(__dirname, '..', '..', 'mkd-academic', 'src', 'index.ts'),
   'mkd-literature': path.resolve(__dirname, '..', '..', 'mkd-literature', 'src', 'index.ts'),
   'mkd-manuscript': path.resolve(__dirname, '..', '..', 'mkd-manuscript', 'src', 'index.ts'),
-  'mkd-screenplay': path.resolve(__dirname, '..', '..', 'mkd-screenplay', 'src', 'index.ts')
+  'mkd-screenplay': path.resolve(__dirname, '..', '..', 'mkd-screenplay', 'src', 'index.ts'),
+  'mkd-zh-manuscript': path.resolve(__dirname, '..', '..', 'mkd-zh-manuscript', 'src', 'index.ts')
 };
 
 const TRANSMUTER_NAME_ALIASES: Record<string, KnownTransmuterName> = {
@@ -79,11 +80,13 @@ const TRANSMUTER_NAME_ALIASES: Record<string, KnownTransmuterName> = {
   literature: 'mkd-literature',
   manuscript: 'mkd-manuscript',
   screenplay: 'mkd-screenplay',
+  'zh-manuscript': 'mkd-zh-manuscript',
   'mkd-mkd': 'mkd-mkd',
   'mkd-academic': 'mkd-academic',
   'mkd-literature': 'mkd-literature',
   'mkd-manuscript': 'mkd-manuscript',
-  'mkd-screenplay': 'mkd-screenplay'
+  'mkd-screenplay': 'mkd-screenplay',
+  'mkd-zh-manuscript': 'mkd-zh-manuscript'
 };
 
 function printHelp(): void {
