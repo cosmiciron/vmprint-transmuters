@@ -2,9 +2,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { createEngineRuntime, LayoutEngine, LayoutUtils, Renderer, resolveDocumentPaths, toLayoutConfig } from '../../../vmprint/engine/src/index.ts';
+import { VMPrintEngine, LayoutUtils, resolveDocumentPaths } from '@vmprint/engine';
 import PdfContext from '@vmprint/context-pdf';
-import LocalFontManager from '../../../vmprint-font-managers/local/src/index.ts';
+import LocalFontManager from '@vmprint/local-fonts';
 
 type KnownTransmuterName = 'mkd-mkd' | 'mkd-academic' | 'mkd-literature' | 'mkd-manuscript' | 'mkd-screenplay' | 'mkd-zh-manuscript';
 
@@ -229,18 +229,15 @@ async function loadTransmuter(modulePath: string): Promise<(input: string, optio
 }
 
 async function renderPdf(document: DocumentInput, inputPath: string, outputPath: string): Promise<void> {
-  const runtime = createEngineRuntime({ fontManager: new LocalFontManager() });
   const documentIR = resolveDocumentPaths(document as never, inputPath);
-  const config = toLayoutConfig(documentIR, false);
-  const engine = new LayoutEngine(config, runtime);
+  const engine = new VMPrintEngine(documentIR as never, new LocalFontManager());
 
   process.stdout.write('[vmprint-transmute] Loading fonts and paginating...\n');
-  await engine.waitForFonts();
-  const pages = engine.simulate(documentIR.elements);
+  const pages = await engine.layout();
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
-  const { width, height } = LayoutUtils.getPageDimensions(config);
+  const { width, height } = LayoutUtils.getPageDimensions(engine.config as never);
   const context = new PdfContext({
     size: [width, height],
     margins: { top: 0, left: 0, right: 0, bottom: 0 },
@@ -250,9 +247,8 @@ async function renderPdf(document: DocumentInput, inputPath: string, outputPath:
   const outputStream = new NodeWriteStreamAdapter(outputPath);
   context.pipe(outputStream);
 
-  const renderer = new Renderer(config, false, runtime);
   process.stdout.write(`[vmprint-transmute] Rendering ${pages.length} pages...\n`);
-  await renderer.render(pages, context);
+  await engine.render(context);
   await outputStream.waitForFinish();
 }
 

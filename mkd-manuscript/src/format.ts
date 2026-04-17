@@ -75,6 +75,10 @@ function asNumber(value: unknown, fallback: number): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
 }
 
+function normalizeMultilineText(value: string): string {
+  return value.replace(/\r\n?/g, '\n');
+}
+
 function formatWordCount(raw: string): string {
   const digits = raw.replace(/[^\d]/g, '');
   if (!digits) return raw;
@@ -378,14 +382,14 @@ export class ManuscriptFormat {
       return;
     }
 
-    this.emitWithProperties(ctx, role, node.value || '', node);
+    this.emitWithProperties(ctx, role, normalizeMultilineText(node.value || ''), node);
   }
 
   private handleBlockquote(node: SemanticNode, ctx: FormatContext): void {
     const paragraphs = (node.children || []).filter((child) => child.kind === 'p');
     if (paragraphs.length === 0) return;
 
-    const rawParagraphs = paragraphs.map((para) => inlinePlainText(para.children || []));
+    const rawParagraphs = paragraphs.map((para) => normalizeMultilineText(inlinePlainText(para.children || [])));
     const firstRaw = rawParagraphs[0].trim();
     const markerMatch = /^\[(poem|lyrics|epigraph)\](?:\s*\n([\s\S]*))?$/i.exec(firstRaw);
 
