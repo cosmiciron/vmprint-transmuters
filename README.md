@@ -1,3 +1,13 @@
+# ⚠️ Repository Moved to Monorepo
+
+This repository is now deprecated and is no longer maintained here. All development, issues, and pull requests have been moved to the primary monorepo:
+
+👉 **[vmprint](https://github.com/cosmiciron/vmprint)**
+
+Please update your bookmarks and direct any contributions or issues there. Thank you!
+
+---
+
 # VMPrint Transmuters
 
 > 🚀 **Part of the [VMPrint Ecosystem](https://github.com/cosmiciron/vmprint)**
